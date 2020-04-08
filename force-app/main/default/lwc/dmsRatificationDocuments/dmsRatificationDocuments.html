@@ -1,0 +1,105 @@
+<!--
+  @File Name          : dmsRatificationDocuments.html
+  @Description        : 
+  @Author             : emmanuel.martinez@tengo.co
+  @Group              : 
+  @Last Modified By   : emmanuel.martinez@tengo.co
+  @Last Modified On   : 27/02/2020, 12:07:19
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    13/02/2020   emmanuel.martinez@tengo.co     Initial Version
+-->
+<template>
+
+    <div class="main-container">
+    
+        <div class="slds-box slds-m-horizontal_small">
+            <lightning-button variant="brand" label="Get All Documents Pending for Ratification" title="Get all documents pending for ratification" icon-name="utility:file" onclick={openDocumentsModal} class="slds-m-horizontal_small"></lightning-button>
+        </div>
+
+    </div>
+    
+    <template if:true={modalShow}>
+
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium"
+                aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                <div class="slds-modal__container">
+                    
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeDocumentsModal} title="Close">
+                            <lightning-icon icon-name="action:close" size="xx-small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Get Documents Pending for Ratification</h2>
+                    </header>
+                    
+                    <div class="slds-modal__content slds-is-relative slds-p-around_medium" id="modal-content-id-1">
+                        
+                        <!--For the spinner to work and restrict its area to a single part, enclose it inside a div position relative slds-is-relative-->
+                        <lightning-spinner if:true={displaySpinner} alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+                        
+                        
+                        <br>
+                        <div class="slds-text-body_regular">Please select a date range to recover all documents marked for ratification.</div>
+                        <div class="slds-text-body_regular">The initial dates set will give you all documents marked from two weeks ago until today.</div>
+                        <br>
+                        
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                
+                                <lightning-input class="cmp-in-fromDate" type="date" name="input2" label="Select the 'From' date value" value={initialFromDate}></lightning-input>
+
+                            </div>
+                            <div class="slds-col">
+                                
+                                <lightning-input class="cmp-in-toDate" type="date" name="input2" label="Select the 'To' date value" value={initialToDate}></lightning-input>
+                                
+                            </div>
+                        </div>
+                        
+                        <br>
+                        <br>
+                        
+                        <center>
+                            <lightning-button variant="brand" label="Find Documents" icon-name="utility:search" title="Primary action" onclick={listRatificationDocuments} class="slds-m-left_x-small"></lightning-button>
+                        </center>
+
+                        <br>
+                        <br>
+                        
+                        <template if:true={thereAreRecords}>
+                            <div>
+                                <lightning-datatable 
+                                    key-field="id" 
+                                    data={attachments} 
+                                    columns={columns}
+                                    onrowaction={handleRowAction}
+                                    hide-checkbox-column="true">
+                                </lightning-datatable>
+                            </div>
+                            <br>
+                            <br>
+                            <center>
+                                <lightning-button variant="success" label="Create Final Document" icon-name="utility:check" title="Primary action" onclick={constructFinalDocument} class="slds-m-left_x-small text-color-white"></lightning-button>
+                            </center>
+                            <br>
+                            <br>
+                        </template>
+                        
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={closeDocumentsModal}>Close</button>
+                    </footer>
+                    
+                </div>
+            </section>
+        
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+    </template>
+
+
+
+
+
+</template>
